@@ -1,0 +1,67 @@
+name: Deploy PWA to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'ark_web/**'
+      - 'ark_*.py'
+      - 'pwa_bridge.py'
+      - 'build_pwa_data.py'
+      - 'pyproject.toml'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Sync dependencies
+        run: uv sync --frozen
+
+      - name: Precompute PWA state (DT + projectors + stones)
+        run: uv run python build_pwa_data.py
+
+      - name: Verify PWA assets
+        run: |
+          test -f ark_web/index.html
+          test -f ark_web/main.js
+          test -f ark_web/ui_panels.js
+          test -f ark_web/sw.js
+          test -f ark_web/data/dt.json
+          test -f ark_web/data/projectors.json
+          test -f ark_web/py/pwa_bridge.py
+          echo "Shell + data + py ✓"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ark_web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

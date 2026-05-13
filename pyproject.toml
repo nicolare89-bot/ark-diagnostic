@@ -1,0 +1,23 @@
+[project]
+name = "kibwtos"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy>=2.4.4",
+    "pyyaml>=6.0.3",
+    "scipy>=1.17.1",
+]
+
+[dependency-groups]
+dev = [
+    "pyinstaller>=6.20.0",
+    "pytest>=9.0.3",
+    "playwright>=1.50.0",
+]
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: ἀργὰ tests (π.χ. κατασκευὴ 600-cell, ~10s)",
+]

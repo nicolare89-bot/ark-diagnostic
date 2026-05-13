@@ -1,0 +1,43 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# PyInstaller build artifacts
+build/
+dist/
+
+# pytest cache
+.pytest_cache/
+
+# Ξεχωριστὸ toolkit ἀπὸ ἄλλη ἐργασία (ark_kit_v2.py — δὲν ἀνήκει στὸ kibwtos repo)
+ark_kit_v2.py
+
+# Στάδιο 3 .exe build artifacts (τοπικά, δὲν ἀνήκουν στὸ repo)
+ark_exe_report.json
+run_ark.bat
+
+# Stones corpus — ΙΔΙΩΤΙΚΟ (μὴ δημοσιοποιήσιμο)
+# Τὰ ἀρχεῖα μένουν τοπικὰ γιὰ τὴ δουλειά μας, ἀλλὰ δὲν φεύγουν ποτὲ στὸ remote.
+BOOTSTRAP_STONES_v*.yaml
+stone_registry_LIVE*.yaml
+stone_registry_LIVE*.yml
+STONES_APPEND*.yaml
+STONES_APPEND*.yml
+ark_web/data/stones.json
+
+# CLAUDE.md — ἐσωτερικὲς ὁδηγίες/προτεραιότητες/πέτρες (ἰδιωτικό)
+CLAUDE.md
+
+# Old git history (backup ἀπὸ τὴν φάσι καθαρισμοῦ — διαγράφεται χειροκίνητα ὅταν ἐπικυρωθεῖ)
+.git.bak/
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Κιβωτός icon">
+  <title>Κιβωτός — DT</title>
+  <rect width="512" height="512" fill="#0b0f14"/>
+  <g transform="translate(256 256)" fill="none" stroke="#d4af37" stroke-width="3" stroke-linejoin="round">
+    <!-- Σχηματικὸ DT: 12 β₁₀ κορυφὲς (κύκλος), 30 β₄ (μεσαῖος), 20 β₆ (ἐσωτερικός) -->
+    <circle r="200" stroke="#d4af37" opacity="0.35"/>
+    <circle r="140" stroke="#7fb069" opacity="0.45"/>
+    <circle r="90"  stroke="#6cb4ee" opacity="0.55"/>
+    <!-- 12 β₁₀ Πατρικά -->
+    <g fill="#d4af37" stroke="none">
+      <circle cx="0"    cy="-200" r="9"/>
+      <circle cx="173"  cy="-100" r="9"/>
+      <circle cx="173"  cy="100"  r="9"/>
+      <circle cx="0"    cy="200"  r="9"/>
+      <circle cx="-173" cy="100"  r="9"/>
+      <circle cx="-173" cy="-100" r="9"/>
+      <circle cx="100"  cy="-173" r="6"/>
+      <circle cx="200"  cy="0"    r="6"/>
+      <circle cx="100"  cy="173"  r="6"/>
+      <circle cx="-100" cy="173"  r="6"/>
+      <circle cx="-200" cy="0"    r="6"/>
+      <circle cx="-100" cy="-173" r="6"/>
+    </g>
+    <!-- Κέντρο: σταυρός -->
+    <g stroke="#ffffff" stroke-width="6" stroke-linecap="round">
+      <line x1="-32" y1="0" x2="32" y2="0"/>
+      <line x1="0" y1="-32" x2="0" y2="32"/>
+    </g>
+  </g>
+</svg>

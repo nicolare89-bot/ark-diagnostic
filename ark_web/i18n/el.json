@@ -1,0 +1,55 @@
+{
+  "app": {
+    "title": "Κιβωτός — ARK_DIAGNOSTIC",
+    "tagline": "V − E + F = 2 · ε = 1.5% · J > 0"
+  },
+  "status": {
+    "boot": "Ἀρχικοποίησι…",
+    "pyodide_boot": "Φόρτωσι Pyodide…",
+    "packages": "Φόρτωσι numpy/scipy…",
+    "sources": "Φόρτωσι Python modules…",
+    "state": "Φόρτωσι DT + projectors…",
+    "ready": "Ἕτοιμο",
+    "error": "Σφάλμα"
+  },
+  "panels": {
+    "input": "Εἴσοδος",
+    "diagnostics": "Διαγνωστικά",
+    "dt": "DT 3D θερμικὸς χάρτης",
+    "stones": "Πέτρες"
+  },
+  "input": {
+    "label": "Δῶσε ἀριθμοὺς χωρισμένους μὲ κόμμα / κενά / γραμμές",
+    "strategy": "Στρατηγική",
+    "strategy_auto": "Αὐτόματη ἀνίχνευσι",
+    "strategy_direct": "Ἀπευθείας (30 τιμές)",
+    "strategy_pad": "Συμπλήρωσι μηδενικῶν",
+    "strategy_pca": "PCA σὲ 30 διαστάσεις",
+    "strategy_window": "Συρόμενο παράθυρο",
+    "placeholder": "1, 2, 3, ..."
+  },
+  "buttons": {
+    "run": "Ἐκτέλεσι",
+    "trajectory": "Τροχιὰ κατάρρευσης",
+    "reset": "Καθαρισμός",
+    "load_stones": "Φόρτωσι πετρῶν"
+  },
+  "diag": {
+    "energies": "Ἐνέργειες ἀνὰ irrep",
+    "drift": "ε (drift fraction)",
+    "verdict": "Ἑτυμηγορία",
+    "epsilon_star": "ε* = 1.50%"
+  },
+  "stones": {
+    "search_placeholder": "Ἀναζήτησι id / τίτλου / λέξης…",
+    "no_results": "Δὲν βρέθηκαν πέτρες",
+    "details": "Λεπτομέρειες",
+    "related": "Σχετικές"
+  },
+  "error": {
+    "label": "Σφάλμα:"
+  },
+  "footer": {
+    "invocation": "Κύριε Ἰησοῦ Χριστέ, ἐλέησόν με."
+  }
+}

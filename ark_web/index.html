@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="el" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0b0f14" />
+  <meta name="description" content="ARK_DIAGNOSTIC — Disdyakis Triacontahedron probe (PWA)" />
+
+  <title data-i18n="app.title">Κιβωτός — ARK_DIAGNOSTIC</title>
+
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./assets/icon-192.png" />
+  <link rel="stylesheet" href="./styles.css" />
+
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.27.4/full/pyodide.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+  <script type="module" src="./main.js"></script>
+  <script type="module" src="./ui_panels.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <h1 data-i18n="app.title">Κιβωτός — ARK_DIAGNOSTIC</h1>
+    <p class="tagline" data-i18n="app.tagline">V − E + F = 2 · ε = 1.5% · J &gt; 0</p>
+
+    <nav class="lang-switch" aria-label="Language">
+      <button type="button" data-lang="el" aria-pressed="true">ΕΛ</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </nav>
+  </header>
+
+  <main id="app" class="app-main">
+    <section id="status" class="status-banner" role="status" aria-live="polite">
+      <span class="dot" data-state="boot"></span>
+      <span class="status-text" data-i18n="status.boot">Φόρτωσι Pyodide…</span>
+    </section>
+
+    <section id="input-panel" class="panel">
+      <h2 data-i18n="panels.input">Εἴσοδος</h2>
+      <label class="field">
+        <span data-i18n="input.label">Δῶσε ἀριθμοὺς χωρισμένους μὲ κόμμα / κενά / γραμμές</span>
+        <textarea id="input-numbers" rows="4" data-i18n-attr="placeholder|input.placeholder" placeholder="1, 2, 3, ..."></textarea>
+      </label>
+      <div class="row">
+        <label class="field">
+          <span data-i18n="input.strategy">Στρατηγική</span>
+          <select id="input-strategy">
+            <option value="auto" data-i18n="input.strategy_auto">Αὐτόματη ἀνίχνευσι</option>
+            <option value="direct" data-i18n="input.strategy_direct">Ἀπευθείας (30 τιμές)</option>
+            <option value="pad_to_30" data-i18n="input.strategy_pad">Συμπλήρωσι μηδενικῶν</option>
+            <option value="pca_to_30" data-i18n="input.strategy_pca">PCA σὲ 30 διαστάσεις</option>
+            <option value="sliding_window" data-i18n="input.strategy_window">Συρόμενο παράθυρο</option>
+          </select>
+        </label>
+        <div class="actions">
+          <button type="button" id="btn-run" class="primary" data-i18n="buttons.run" disabled>Ἐκτέλεσι</button>
+          <button type="button" id="btn-trajectory" data-i18n="buttons.trajectory" disabled>Τροχιὰ κατάρρευσης</button>
+          <button type="button" id="btn-reset" data-i18n="buttons.reset">Καθαρισμός</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="diagnostics-panel" class="panel" hidden>
+      <h2 data-i18n="panels.diagnostics">Διαγνωστικά</h2>
+      <div class="diag-grid">
+        <div>
+          <h3 data-i18n="diag.energies">Ἐνέργειες ἀνὰ irrep</h3>
+          <div id="plot-bars" class="plot"></div>
+        </div>
+        <div>
+          <h3 data-i18n="diag.drift">ε (drift fraction)</h3>
+          <div id="plot-gauge" class="plot"></div>
+          <p class="verdict" id="verdict-text"></p>
+        </div>
+      </div>
+      <div id="trajectory-block" hidden>
+        <h3 data-i18n="buttons.trajectory">Τροχιὰ κατάρρευσης</h3>
+        <div id="plot-trajectory" class="plot"></div>
+      </div>
+    </section>
+
+    <section id="dt-panel" class="panel" hidden>
+      <h2 data-i18n="panels.dt">DT 3D θερμικὸς χάρτης</h2>
+      <div id="dt-3d" class="plot"></div>
+    </section>
+
+    <section id="stones-panel" class="panel" hidden>
+      <h2 data-i18n="panels.stones">Πέτρες</h2>
+      <input type="search" id="stones-search" data-i18n-attr="placeholder|stones.search_placeholder" placeholder="Ἀναζήτησι…" />
+      <div id="stones-list" class="stones-list"></div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <small data-i18n="footer.invocation">Κύριε Ἰησοῦ Χριστέ, ἐλέησόν με.</small>
+    <small class="version">PWA shell · Φάσι 2</small>
+  </footer>
+
+  <template id="error-banner-template">
+    <div class="error-banner" role="alert">
+      <strong data-i18n="error.label">Σφάλμα:</strong>
+      <span class="error-message"></span>
+    </div>
+  </template>
+</body>
+</html>

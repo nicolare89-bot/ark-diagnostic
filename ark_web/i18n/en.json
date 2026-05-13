@@ -1,0 +1,55 @@
+{
+  "app": {
+    "title": "Ark — ARK_DIAGNOSTIC",
+    "tagline": "V − E + F = 2 · ε = 1.5% · J > 0"
+  },
+  "status": {
+    "boot": "Initializing…",
+    "pyodide_boot": "Loading Pyodide…",
+    "packages": "Loading numpy/scipy…",
+    "sources": "Loading Python modules…",
+    "state": "Loading DT + projectors…",
+    "ready": "Ready",
+    "error": "Error"
+  },
+  "panels": {
+    "input": "Input",
+    "diagnostics": "Diagnostics",
+    "dt": "DT 3D heat-map",
+    "stones": "Stones"
+  },
+  "input": {
+    "label": "Enter numbers separated by commas / spaces / newlines",
+    "strategy": "Strategy",
+    "strategy_auto": "Auto-detect",
+    "strategy_direct": "Direct (30 values)",
+    "strategy_pad": "Pad with zeros",
+    "strategy_pca": "PCA to 30 dims",
+    "strategy_window": "Sliding window",
+    "placeholder": "1, 2, 3, ..."
+  },
+  "buttons": {
+    "run": "Run",
+    "trajectory": "Collapse trajectory",
+    "reset": "Reset",
+    "load_stones": "Load stones"
+  },
+  "diag": {
+    "energies": "Energies per irrep",
+    "drift": "ε (drift fraction)",
+    "verdict": "Verdict",
+    "epsilon_star": "ε* = 1.50%"
+  },
+  "stones": {
+    "search_placeholder": "Search id / title / word…",
+    "no_results": "No stones found",
+    "details": "Details",
+    "related": "Related"
+  },
+  "error": {
+    "label": "Error:"
+  },
+  "footer": {
+    "invocation": "Lord Jesus Christ, have mercy on me."
+  }
+}
