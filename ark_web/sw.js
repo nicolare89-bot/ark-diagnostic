@@ -12,7 +12,7 @@
 //
 // V − E + F = 2.
 
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const SHELL_CACHE = `ark-shell-${CACHE_VERSION}`;
 const CDN_CACHE   = `ark-cdn-${CACHE_VERSION}`;
 

@@ -148,18 +148,22 @@ def analyze(input_json_str: str) -> dict:
     ih = diagnose_irrep_distribution(output, projectors)
     drift = diagnose_epsilon_drift(ih)
 
-    # Heat-map per β₄ vertex: ‖P_irrep v‖² φορτίο σὲ κάθε midpoint
-    # Ὑπολογίζεται ἀπὸ τὴν μέση ἐνέργεια ἀνὰ irrep, projected back σὲ 30 vertices
-    # μέσῳ τῆς διαγωνίου τῶν projectors (rank-weighted).
-    diag_load = np.zeros(30, dtype=float)
+    # Heat-map per β₄ vertex: ποῦ συγκεντρώνεται ἡ projected ἐνέργεια ἀνὰ θέσι.
+    # Σημείωσι: ἡ διαγώνιος κάθε Iₕ-equivariant projector εἶναι σταθερὴ
+    # (Schur — Iₕ δρᾷ transitive στὴ β₄ orbit), ἄρα ὁ παλαιὸς τύπος
+    # diag(P)-weighted ἔδινε πάντα uniform heat. Πραγματικὴ διαφοροποίησι
+    # ἀπαιτεῖ τὸ projection (P @ v)_i ἀνὰ vertex, βαρυνόμενο μὲ τὴν irrep ἐνέργεια.
+    v_avg = output.mean(axis=0)
+    total_E = float(sum(ih['energies'].values())) or 1.0
+    heat_arr = np.zeros(30, dtype=float)
     for name, P in projectors.items():
         e = float(ih['energies'].get(name, 0.0))
-        diag_load += e * np.diagonal(P)
-    # Κανονικοποίησι γιὰ [0,1] heat-map
-    if diag_load.max() > 0:
-        heat = (diag_load / diag_load.max()).tolist()
-    else:
-        heat = diag_load.tolist()
+        if e <= 0:
+            continue
+        pv = P @ v_avg
+        heat_arr += (e / total_E) * (pv ** 2)
+    m = float(heat_arr.max())
+    heat = (heat_arr / m).tolist() if m > 0 else heat_arr.tolist()
 
     return {
         'input': {
