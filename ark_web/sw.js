@@ -12,7 +12,7 @@
 //
 // V − E + F = 2.
 
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5';
 const SHELL_CACHE = `ark-shell-${CACHE_VERSION}`;
 const CDN_CACHE   = `ark-cdn-${CACHE_VERSION}`;
 
@@ -33,6 +33,7 @@ const SHELL_ASSETS = [
   './py/ark_irreps.py',
   './py/ark_diagnostics.py',
   './py/ark_adapter.py',
+  './py/ark_local_b10.py',
   './py/pwa_bridge.py',
 ];
 

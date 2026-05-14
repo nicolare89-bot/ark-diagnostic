@@ -30,6 +30,7 @@ const PYTHON_SOURCES = [
   'ark_irreps.py',
   'ark_diagnostics.py',
   'ark_adapter.py',
+  'ark_local_b10.py',
   'pwa_bridge.py',
 ];
 

@@ -72,6 +72,7 @@ async function handleRun() {
     renderGauge(result);
     renderVerdict(result);
     renderDT3D(result);
+    renderLocalBeta10(result);
   } catch (err) {
     flashError(err?.message ?? String(err));
   }
@@ -282,6 +283,53 @@ function renderDT3D(result) {
     legend: { orientation: 'h', y: -0.05 },
   };
   Plotly.react('dt-3d', [edge_trace, beta10_trace, beta6_trace, beta4_trace], layout, { displayModeBar: false, responsive: true });
+}
+
+// ─── viz #4b: local β₁₀ neighborhood (12-bar chart) ──────────────
+
+function renderLocalBeta10(result) {
+  const data = result.local_beta10;
+  if (!data || !Array.isArray(data.signals) || data.signals.length === 0) return;
+  document.getElementById('beta10-panel').hidden = false;
+
+  const n = data.signals.length;
+  const labels = Array.from({ length: n }, (_, i) => `β₁₀ #${i + 1}`);
+  const domIdx = data.vertex_ids.indexOf(data.dominant_vertex);
+  const colors = data.signals.map((_, i) =>
+    i === domIdx ? '#ffd966' : '#d4af37'  // dominant ξεχωρίζει μὲ ἀνοιχτότερο χρυσό
+  );
+  const lineWidths = data.signals.map((_, i) => (i === domIdx ? 2 : 0.5));
+
+  const bar = {
+    type: 'bar',
+    x: labels,
+    y: data.signals,
+    marker: { color: colors, line: { color: '#0b0f14', width: lineWidths } },
+    hovertemplate: '%{x} (DT v=%{customdata})<br>signal: %{y:.4f}<extra></extra>',
+    customdata: data.vertex_ids,
+  };
+  const layout = {
+    height: 280,
+    margin: { l: 50, r: 20, t: 10, b: 60 },
+    paper_bgcolor: 'transparent',
+    plot_bgcolor: 'transparent',
+    font: { color: '#9aa7b4' },
+    xaxis: { tickangle: -45, color: '#9aa7b4' },
+    yaxis: { title: { text: getI18n('beta10.y_axis', 'local signal') }, color: '#9aa7b4' },
+  };
+  Plotly.react('plot-beta10', [bar], layout, { displayModeBar: false, responsive: true });
+
+  // Summary text
+  const domVal = document.getElementById('beta10-dominant-value');
+  const aniVal = document.getElementById('beta10-anisotropy-value');
+  if (domVal) domVal.textContent = `β₁₀ #${domIdx + 1} (DT v=${data.dominant_vertex})`;
+  if (aniVal) aniVal.textContent = `${data.anisotropy_pct.toFixed(1)}%`;
+}
+
+function getI18n(key, fallback) {
+  // Διαβάζει ἀπὸ τὸ πρώτο stored data-i18n element ποὺ ταιριάζει.
+  const node = document.querySelector(`[data-i18n="${key}"]`);
+  return node?.textContent || fallback;
 }
 
 // ─── viz #5: stones panel ────────────────────────────────────────

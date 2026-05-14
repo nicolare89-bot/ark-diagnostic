@@ -16,7 +16,13 @@
     "input": "Input",
     "diagnostics": "Diagnostics",
     "dt": "DT 3D heat-map",
+    "beta10": "Local signals per β₁₀ vertex",
     "stones": "Stones"
+  },
+  "beta10": {
+    "dominant": "Dominant",
+    "anisotropy": "Anisotropy",
+    "y_axis": "local signal"
   },
   "input": {
     "label": "Enter numbers separated by commas / spaces / newlines",

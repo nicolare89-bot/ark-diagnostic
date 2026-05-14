@@ -37,6 +37,10 @@ from ark_diagnostics import (
     diagnose_epsilon_drift,
 )
 from ark_adapter import adapt
+from ark_local_b10 import (
+    beta10_to_beta4_neighbors,
+    diagnose_local_beta10_neighborhood,
+)
 
 
 # Singleton state ποὺ συμπληρώνεται ἀπὸ τὸ init_state(...) ἀπὸ τὸ JS side.
@@ -44,6 +48,7 @@ _STATE: dict = {
     'dt': None,            # DT graph (μὲ frozensets ξανὰ)
     'projectors': None,    # dict[name → ndarray(30,30)]
     'beta4_coords': None,  # ndarray(30,3) — γιὰ DT 3D heat
+    'b10_neighbors': None, # dict[β₁₀ vertex → list of 5 β₄ vertex indices]
 }
 
 
@@ -101,6 +106,7 @@ def init_state(dt_json_str: str, proj_json_str: str) -> dict:
     _STATE['dt'] = dt
     _STATE['projectors'] = projectors
     _STATE['beta4_coords'] = beta4_coords
+    _STATE['b10_neighbors'] = beta10_to_beta4_neighbors(dt)
 
     return {
         'ok': True,
@@ -165,6 +171,20 @@ def analyze(input_json_str: str) -> dict:
     m = float(heat_arr.max())
     heat = (heat_arr / m).tolist() if m > 0 else heat_arr.tolist()
 
+    # Tοπικὸ β₁₀ neighborhood: 12 signals, ἕνα ἀνὰ Πατρικὴ κορυφή
+    b10_diag = diagnose_local_beta10_neighborhood(
+        v_avg, _STATE['dt'], neighbors=_STATE['b10_neighbors'],
+    )
+    # Sorted by DT vertex index γιὰ deterministic ordering στὸ JS side
+    b10_items = sorted(b10_diag['local_signal'].items())
+    local_beta10 = {
+        'vertex_ids': [int(v) for v, _ in b10_items],
+        'signals': [float(s) for _, s in b10_items],
+        'dominant_vertex': int(b10_diag['dominant_beta10']),
+        'anisotropy_pct': float(b10_diag['anisotropy_pct']),
+        'total_signal': float(b10_diag['total_signal']),
+    }
+
     return {
         'input': {
             'shape_orig': list(np.asarray(v).shape),
@@ -184,6 +204,7 @@ def analyze(input_json_str: str) -> dict:
         'predicted_cycles_to_collapse': float(drift.get('predicted_cycles_to_collapse', float('inf'))) if np.isfinite(drift.get('predicted_cycles_to_collapse', float('inf'))) else None,
         'verdict_drift': drift.get('verdict', ''),
         'heat_beta4': heat,  # μῆκος 30
+        'local_beta10': local_beta10,
     }
 
 

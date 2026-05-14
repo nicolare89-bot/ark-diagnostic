@@ -140,9 +140,16 @@ def test_run_produces_diagnostics(page):
     page.wait_for_selector('#plot-bars .plotly', timeout=10_000)
     page.wait_for_selector('#plot-gauge .plotly', timeout=10_000)
     page.wait_for_selector('#dt-3d .plotly', timeout=10_000)
+    page.wait_for_selector('#plot-beta10 .plotly', timeout=10_000)
 
     verdict = page.text_content('#verdict-text') or ''
     assert verdict, 'verdict text κενό'
+
+    # β₁₀ panel summary πρέπει νὰ ἔχει πραγματικὲς τιμές, ὄχι '—'
+    dom = page.text_content('#beta10-dominant-value') or ''
+    ani = page.text_content('#beta10-anisotropy-value') or ''
+    assert dom and dom != '—', f'β₁₀ dominant value κενό: {dom!r}'
+    assert ani and ani != '—', f'β₁₀ anisotropy value κενό: {ani!r}'
 
 
 @pytest.mark.slow
