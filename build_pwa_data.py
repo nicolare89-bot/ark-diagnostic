@@ -32,6 +32,7 @@ except Exception:
 from ark_geometry import build_DT, EPSILON, EPSILON_NOMINAL, PHI, BETA10, BETA6, BETA4
 from ark_irreps import build_irrep_projectors_30_equivariant, RANKS_BETA4, IH_DIMS
 from ark_stones import StoneRegistry
+from ark_wu import build_PE, wu_bicomplex, wu_sector_decomposition
 
 
 HERE = Path(__file__).resolve().parent
@@ -126,6 +127,40 @@ def main() -> None:
     (OUT / 'projectors.json').write_text(json.dumps(projectors_to_json(projectors)), encoding='utf-8')
     total_rank = sum(RANKS_BETA4.values())
     print(f'  → projectors.json: Σranks={total_rank} (expected 30)')
+
+    print('Building Wu sectors (structural)…')
+    try:
+        pe = build_PE(dt)
+        bicx = wu_bicomplex(dt, pe)
+        sectors, sector_indices = wu_sector_decomposition(bicx, dt)
+        # sector_indices: dict[β₁₀ vertex → list of Tot^4 basis indices]
+        counts = sorted(((int(v), len(idxs)) for v, idxs in sector_indices.items()), key=lambda x: x[0])
+        # Tot^n dimensions γιὰ n=0..4 (filtration)
+        tot_dims = [int(len(bicx['basis'][n])) for n in range(5)]
+        # Bidegree breakdown: |C^(p,q)| γιὰ p,q ∈ {0,1,2}
+        bidegree = {}
+        for n in range(5):
+            for sigma, tau, p, q in bicx['basis'][n]:
+                bidegree[(p, q)] = bidegree.get((p, q), 0) + 1
+        bideg_grid = [[int(bidegree.get((p, q), 0)) for q in range(3)] for p in range(3)]
+        wu_data = {
+            'b4': 12,                                # ἁρμονικὴ διάστασι (Π32-WU-PROBE.01)
+            'n_total_tot4': int(len(sectors)),
+            'n_sectors': int(len(sector_indices)),
+            'sector_vertex_ids': [v for v, _ in counts],
+            'sector_counts':     [c for _, c in counts],
+            'tot_dims':          tot_dims,           # [|Tot^0|, …, |Tot^4|]
+            'bidegree':          bideg_grid,         # 3×3, bideg[p][q] = |C^(p,q)|
+        }
+        (OUT / 'wu_sectors.json').write_text(json.dumps(wu_data, ensure_ascii=False), encoding='utf-8')
+        print(f'  → wu_sectors.json: Tot^n dims={tot_dims}, Σ_sectors={sum(c for _, c in counts)}')
+    except Exception as exc:
+        print(f'  ⚠ Wu sectors ἀπέτυχε: {exc}')
+        (OUT / 'wu_sectors.json').write_text(json.dumps({
+            'b4': 0, 'n_total_tot4': 0, 'n_sectors': 0,
+            'sector_vertex_ids': [], 'sector_counts': [],
+            'tot_dims': [], 'bidegree': [],
+        }), encoding='utf-8')
 
     print('Building stones index…')
     try:

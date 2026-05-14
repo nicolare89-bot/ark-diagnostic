@@ -126,6 +126,18 @@ def test_pyodide_boots(page):
 
 
 @pytest.mark.slow
+def test_wu_panel_renders(page):
+    """Tὸ Wu structural panel φαίνεται μετὰ τὸ ready (static, χωρὶς run)."""
+    _wait_ready(page)
+    # b4 value πρέπει νὰ ἔχει γεμίσει (ὄχι '—')
+    b4 = page.text_content('#wu-b4-value') or ''
+    assert b4 and b4 != '—', f'Wu b4 value κενό: {b4!r}'
+    # Tot^n bar plot πρέπει νὰ ἔχει render-αριστεῖ
+    page.wait_for_selector('#plot-wu-tot .plotly', timeout=10_000)
+    page.wait_for_selector('#plot-wu-bideg .plotly', timeout=10_000)
+
+
+@pytest.mark.slow
 def test_run_produces_diagnostics(page):
     """Μετὰ ἀπὸ Run μὲ 30 ἀριθμούς, ἐμφανίζονται bars + gauge + DT."""
     _wait_ready(page)

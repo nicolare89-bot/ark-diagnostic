@@ -17,12 +17,20 @@
     "diagnostics": "Διαγνωστικά",
     "dt": "DT 3D θερμικὸς χάρτης",
     "beta10": "Τοπικὰ σήματα ἀνὰ β₁₀ κορυφή",
+    "wu": "Δομὴ Wu bicomplex",
     "stones": "Πέτρες"
   },
   "beta10": {
     "dominant": "Κυρίαρχος",
     "anisotropy": "Ἀνισοτροπία",
     "y_axis": "τοπικὸ σῆμα"
+  },
+  "wu": {
+    "b4_label": "Ἁρμονικά (b₄)",
+    "total_label": "Σύνολο Tot^*",
+    "iso_label": "Iₕ-ἰσοτροπία: 12 ζῶνες ἰσοδύναμες",
+    "tot_title": "Tot^n διάστασι (filtration)",
+    "bideg_title": "Bidegree |C^(p,q)|"
   },
   "input": {
     "label": "Δῶσε ἀριθμοὺς χωρισμένους μὲ κόμμα / κενά / γραμμές",

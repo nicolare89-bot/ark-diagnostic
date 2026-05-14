@@ -39,6 +39,8 @@ function onReady() {
 
   // Stones panel γεμίζει ἀπὸ τὸ window.ark.stones (static index)
   initStonesPanel();
+  // Wu structural panel — δείχνει τὴ δομὴ τοῦ bicomplex (input-independent)
+  initWuPanel();
 }
 
 // ─── input parsing ────────────────────────────────────────────────
@@ -330,6 +332,79 @@ function getI18n(key, fallback) {
   // Διαβάζει ἀπὸ τὸ πρώτο stored data-i18n element ποὺ ταιριάζει.
   const node = document.querySelector(`[data-i18n="${key}"]`);
   return node?.textContent || fallback;
+}
+
+// ─── viz #4c: Wu bicomplex structure (static, input-independent) ─
+
+function initWuPanel() {
+  const wu = window.ark.wu;
+  if (!wu || !Array.isArray(wu.tot_dims) || wu.tot_dims.length === 0) return;
+  document.getElementById('wu-panel').hidden = false;
+
+  // Summary values
+  const b4El = document.getElementById('wu-b4-value');
+  const totEl = document.getElementById('wu-total-value');
+  const total = (wu.tot_dims || []).reduce((a, b) => a + b, 0);
+  if (b4El) b4El.textContent = String(wu.b4);
+  if (totEl) totEl.textContent = String(total);
+
+  // (a) Tot^n bars (filtration)
+  const totBar = {
+    type: 'bar',
+    x: wu.tot_dims.map((_, n) => `Tot^${n}`),
+    y: wu.tot_dims,
+    marker: { color: '#7fb069', line: { color: '#0b0f14', width: 0.5 } },
+    text: wu.tot_dims.map((v) => String(v)),
+    textposition: 'auto',
+    hovertemplate: '%{x}: %{y}<extra></extra>',
+  };
+  const totLayout = {
+    height: 240,
+    margin: { l: 50, r: 20, t: 10, b: 40 },
+    paper_bgcolor: 'transparent',
+    plot_bgcolor: 'transparent',
+    font: { color: '#9aa7b4' },
+    xaxis: { color: '#9aa7b4' },
+    yaxis: { color: '#9aa7b4', type: 'log', title: { text: 'dim (log)' } },
+  };
+  Plotly.react('plot-wu-tot', [totBar], totLayout, { displayModeBar: false, responsive: true });
+
+  // (b) Bidegree 3×3 heatmap
+  const grid = wu.bidegree;
+  if (Array.isArray(grid) && grid.length === 3) {
+    const flat = grid.flat();
+    const annotations = [];
+    for (let p = 0; p < 3; p++) {
+      for (let q = 0; q < 3; q++) {
+        annotations.push({
+          x: q, y: p, xref: 'x', yref: 'y',
+          text: String(grid[p][q]),
+          showarrow: false,
+          font: { color: grid[p][q] > 300 ? '#0b0f14' : '#e8eef5', size: 14 },
+        });
+      }
+    }
+    const heat = {
+      type: 'heatmap',
+      z: grid,
+      x: ['q=0', 'q=1', 'q=2'],
+      y: ['p=0', 'p=1', 'p=2'],
+      colorscale: 'YlOrRd',
+      showscale: false,
+      hovertemplate: 'p=%{y}, q=%{x}: %{z}<extra></extra>',
+    };
+    const heatLayout = {
+      height: 240,
+      margin: { l: 50, r: 20, t: 10, b: 40 },
+      paper_bgcolor: 'transparent',
+      plot_bgcolor: 'transparent',
+      font: { color: '#9aa7b4' },
+      xaxis: { color: '#9aa7b4', side: 'bottom' },
+      yaxis: { color: '#9aa7b4', autorange: 'reversed' },
+      annotations,
+    };
+    Plotly.react('plot-wu-bideg', [heat], heatLayout, { displayModeBar: false, responsive: true });
+  }
 }
 
 // ─── viz #5: stones panel ────────────────────────────────────────

@@ -275,6 +275,17 @@ button.primary:hover:not(:disabled) {
   .diag-grid { grid-template-columns: 1fr; }
 }
 
+.wu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .wu-grid { grid-template-columns: 1fr; }
+}
+
+.wu-grid h3,
 .diag-grid h3 {
   margin: 0.25rem 0 0.5rem;
   font-size: 0.95rem;

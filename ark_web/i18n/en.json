@@ -17,12 +17,20 @@
     "diagnostics": "Diagnostics",
     "dt": "DT 3D heat-map",
     "beta10": "Local signals per β₁₀ vertex",
+    "wu": "Wu bicomplex structure",
     "stones": "Stones"
   },
   "beta10": {
     "dominant": "Dominant",
     "anisotropy": "Anisotropy",
     "y_axis": "local signal"
+  },
+  "wu": {
+    "b4_label": "Harmonic (b₄)",
+    "total_label": "Total Tot^*",
+    "iso_label": "Iₕ-isotropy: 12 equal sectors",
+    "tot_title": "Tot^n dimension (filtration)",
+    "bideg_title": "Bidegree |C^(p,q)|"
   },
   "input": {
     "label": "Enter numbers separated by commas / spaces / newlines",
