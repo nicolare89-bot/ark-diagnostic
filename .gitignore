@@ -41,3 +41,7 @@ CLAUDE.md
 # Old git history (backup ἀπὸ τὴν φάσι καθαρισμοῦ — διαγράφεται χειροκίνητα ὅταν ἐπικυρωθεῖ)
 .git.bak/
 
+# Local-only debug scripts καὶ screenshots (αudit, icon-gen, NFC checks)
+_*.py
+_shots/
+
