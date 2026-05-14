@@ -12,7 +12,7 @@
 //
 // V − E + F = 2.
 
-const CACHE_VERSION = 'v6';
+const CACHE_VERSION = 'v7';
 const SHELL_CACHE = `ark-shell-${CACHE_VERSION}`;
 const CDN_CACHE   = `ark-cdn-${CACHE_VERSION}`;
 
@@ -30,6 +30,7 @@ const SHELL_ASSETS = [
   './data/projectors.json',
   './data/stones.json',
   './data/wu_sectors.json',
+  './data/hashimoto.json',
   './py/ark_geometry.py',
   './py/ark_irreps.py',
   './py/ark_diagnostics.py',

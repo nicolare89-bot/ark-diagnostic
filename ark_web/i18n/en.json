@@ -18,6 +18,7 @@
     "dt": "DT 3D heat-map",
     "beta10": "Local signals per β₁₀ vertex",
     "wu": "Wu bicomplex structure",
+    "hashimoto": "Hashimoto B-matrix spectrum",
     "stones": "Stones"
   },
   "beta10": {
@@ -31,6 +32,13 @@
     "iso_label": "Iₕ-isotropy: 12 equal sectors",
     "tot_title": "Tot^n dimension (filtration)",
     "bideg_title": "Bidegree |C^(p,q)|"
+  },
+  "hashimoto": {
+    "rho": "ρ(B)",
+    "gap": "spectral gap",
+    "real": "real",
+    "ihara_ok": "✓ Ihara",
+    "ihara_fail": "✗ Ihara"
   },
   "input": {
     "label": "Enter numbers separated by commas / spaces / newlines",

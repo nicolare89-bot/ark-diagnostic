@@ -154,11 +154,12 @@ async function bootPyodide() {
 
   setStep('boot', 'Φόρτωσι DT + projectors…');
   console.log('[ark] step 4: fetch data');
-  const [dt, projectors, stones, wu] = await Promise.all([
+  const [dt, projectors, stones, wu, hashimoto] = await Promise.all([
     fetch('./data/dt.json').then(checkJson),
     fetch('./data/projectors.json').then(checkJson),
     fetch('./data/stones.json').then(checkJson).catch(() => ({ stones: [] })),
     fetch('./data/wu_sectors.json').then(checkJson).catch(() => null),
+    fetch('./data/hashimoto.json').then(checkJson).catch(() => null),
   ]);
   console.log('[ark] step 4 done');
 
@@ -195,6 +196,7 @@ __sanity = pwa_bridge.init_state(__dt_json, __proj_json)
     dt,
     stones,
     wu,
+    hashimoto,
     analyze,
     trajectory,
   };

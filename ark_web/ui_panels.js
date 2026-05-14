@@ -41,6 +41,8 @@ function onReady() {
   initStonesPanel();
   // Wu structural panel — δείχνει τὴ δομὴ τοῦ bicomplex (input-independent)
   initWuPanel();
+  // Hashimoto spectrum panel — 360 eigenvalues στὸ μιγαδικὸ ἐπίπεδο
+  initHashimotoPanel();
 }
 
 // ─── input parsing ────────────────────────────────────────────────
@@ -405,6 +407,68 @@ function initWuPanel() {
     };
     Plotly.react('plot-wu-bideg', [heat], heatLayout, { displayModeBar: false, responsive: true });
   }
+}
+
+// ─── viz #4d: Hashimoto spectrum (static, complex plane scatter) ─
+
+function initHashimotoPanel() {
+  const h = window.ark.hashimoto;
+  if (!h || !Array.isArray(h.re) || h.re.length === 0) return;
+  document.getElementById('hashimoto-panel').hidden = false;
+
+  // Summary
+  const rhoEl  = document.getElementById('hashimoto-rho');
+  const gapEl  = document.getElementById('hashimoto-gap');
+  const realEl = document.getElementById('hashimoto-real');
+  const iharaEl = document.getElementById('hashimoto-ihara');
+  if (rhoEl)  rhoEl.textContent  = h.spectral_radius.toFixed(4);
+  if (gapEl)  gapEl.textContent  = h.spectral_gap.toFixed(4);
+  if (realEl) realEl.textContent = `${h.n_real_eigvals}/${h.re.length}`;
+  if (iharaEl) {
+    const okKey  = 'hashimoto.ihara_ok';
+    const failKey = 'hashimoto.ihara_fail';
+    iharaEl.textContent = getI18n(h.ihara_holds ? okKey : failKey,
+      h.ihara_holds ? '✓ Ihara' : '✗ Ihara');
+    iharaEl.style.color = h.ihara_holds ? '#7fb069' : '#d96666';
+  }
+
+  // Scatter στὸ μιγαδικὸ ἐπίπεδο: marker μέγεθος ≈ |λ| γιὰ ἔμφαση στὰ μεγαλύτερα
+  const abs_eigs = h.re.map((r, i) => Math.sqrt(r * r + h.im[i] * h.im[i]));
+  const trace = {
+    type: 'scatter', mode: 'markers',
+    x: h.re, y: h.im,
+    marker: {
+      size: 5,
+      color: abs_eigs,
+      colorscale: 'YlOrRd',
+      cmin: 0, cmax: h.spectral_radius,
+      showscale: true,
+      colorbar: { title: '|λ|', tickfont: { color: '#e8eef5' } },
+      opacity: 0.85,
+      line: { color: '#0b0f14', width: 0.5 },
+    },
+    hovertemplate: 'λ = %{x:.3f} + %{y:.3f}i<br>|λ| = %{marker.color:.3f}<extra></extra>',
+  };
+  // Unit circle reference (Ihara connection: poles of ζ at |z|·sqrt(d-1) ≈ 1)
+  const tArr = Array.from({ length: 100 }, (_, i) => (2 * Math.PI * i) / 99);
+  const unit = {
+    type: 'scatter', mode: 'lines',
+    x: tArr.map(Math.cos), y: tArr.map(Math.sin),
+    line: { color: '#9aa7b4', width: 1, dash: 'dot' },
+    showlegend: false,
+    hoverinfo: 'skip',
+  };
+  const layout = {
+    height: 320,
+    margin: { l: 60, r: 20, t: 10, b: 40 },
+    paper_bgcolor: 'transparent',
+    plot_bgcolor: 'transparent',
+    font: { color: '#9aa7b4' },
+    xaxis: { title: 'Re(λ)', color: '#9aa7b4', zerolinecolor: '#25303d', gridcolor: '#1d2630' },
+    yaxis: { title: 'Im(λ)', color: '#9aa7b4', zerolinecolor: '#25303d', gridcolor: '#1d2630', scaleanchor: 'x', scaleratio: 1 },
+    showlegend: false,
+  };
+  Plotly.react('plot-hashimoto', [unit, trace], layout, { displayModeBar: false, responsive: true });
 }
 
 // ─── viz #5: stones panel ────────────────────────────────────────

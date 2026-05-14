@@ -18,6 +18,7 @@
     "dt": "DT 3D θερμικὸς χάρτης",
     "beta10": "Τοπικὰ σήματα ἀνὰ β₁₀ κορυφή",
     "wu": "Δομὴ Wu bicomplex",
+    "hashimoto": "Hashimoto B-matrix φάσμα",
     "stones": "Πέτρες"
   },
   "beta10": {
@@ -31,6 +32,13 @@
     "iso_label": "Iₕ-ἰσοτροπία: 12 ζῶνες ἰσοδύναμες",
     "tot_title": "Tot^n διάστασι (filtration)",
     "bideg_title": "Bidegree |C^(p,q)|"
+  },
+  "hashimoto": {
+    "rho": "ρ(B)",
+    "gap": "spectral gap",
+    "real": "πραγματικά",
+    "ihara_ok": "✓ Ihara",
+    "ihara_fail": "✗ Ihara"
   },
   "input": {
     "label": "Δῶσε ἀριθμοὺς χωρισμένους μὲ κόμμα / κενά / γραμμές",

@@ -138,6 +138,19 @@ def test_wu_panel_renders(page):
 
 
 @pytest.mark.slow
+def test_hashimoto_panel_renders(page):
+    """Tὸ Hashimoto spectrum panel φαίνεται μετὰ τὸ ready (static, 360 eigvals)."""
+    _wait_ready(page)
+    rho = page.text_content('#hashimoto-rho') or ''
+    gap = page.text_content('#hashimoto-gap') or ''
+    real = page.text_content('#hashimoto-real') or ''
+    assert rho and rho != '—', f'Hashimoto ρ value κενό: {rho!r}'
+    assert gap and gap != '—', f'Hashimoto gap κενό: {gap!r}'
+    assert '/360' in real, f'Hashimoto real count λάθος: {real!r}'
+    page.wait_for_selector('#plot-hashimoto .plotly', timeout=10_000)
+
+
+@pytest.mark.slow
 def test_run_produces_diagnostics(page):
     """Μετὰ ἀπὸ Run μὲ 30 ἀριθμούς, ἐμφανίζονται bars + gauge + DT."""
     _wait_ready(page)

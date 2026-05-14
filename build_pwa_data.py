@@ -33,6 +33,7 @@ from ark_geometry import build_DT, EPSILON, EPSILON_NOMINAL, PHI, BETA10, BETA6,
 from ark_irreps import build_irrep_projectors_30_equivariant, RANKS_BETA4, IH_DIMS
 from ark_stones import StoneRegistry
 from ark_wu import build_PE, wu_bicomplex, wu_sector_decomposition
+from ark_hashimoto import build_hashimoto_B, hashimoto_spectrum, verify_ihara_identity
 
 
 HERE = Path(__file__).resolve().parent
@@ -160,6 +161,37 @@ def main() -> None:
             'b4': 0, 'n_total_tot4': 0, 'n_sectors': 0,
             'sector_vertex_ids': [], 'sector_counts': [],
             'tot_dims': [], 'bidegree': [],
+        }), encoding='utf-8')
+
+    print('Building Hashimoto spectrum (structural)…')
+    try:
+        B = build_hashimoto_B(dt)
+        eigvals = hashimoto_spectrum(dt, B=B)
+        abs_eigs = np.abs(eigvals)
+        sorted_abs = np.sort(abs_eigs)[::-1]
+        rho = float(sorted_abs[0])
+        gap = float(rho - sorted_abs[1]) if len(sorted_abs) > 1 else float(rho)
+        n_real = int(np.sum(np.abs(eigvals.imag) < 1e-10))
+        ihara = verify_ihara_identity(dt, x=0.1, B=B)
+        ihara_ok = bool(ihara['rel_diff'] < 1e-6)
+        hashimoto_data = {
+            'n_directed_edges': int(B.shape[0]),
+            're': eigvals.real.tolist(),
+            'im': eigvals.imag.tolist(),
+            'spectral_radius': rho,
+            'spectral_gap': gap,
+            'n_real_eigvals': n_real,
+            'ihara_holds': ihara_ok,
+            'ihara_rel_diff': float(ihara['rel_diff']),
+        }
+        (OUT / 'hashimoto.json').write_text(json.dumps(hashimoto_data, ensure_ascii=False), encoding='utf-8')
+        print(f'  → hashimoto.json: 2E={B.shape[0]}, ρ={rho:.4f}, gap={gap:.4f}, real={n_real}/{B.shape[0]}, Ihara {"✓" if ihara_ok else "✗"}')
+    except Exception as exc:
+        print(f'  ⚠ Hashimoto spectrum ἀπέτυχε: {exc}')
+        (OUT / 'hashimoto.json').write_text(json.dumps({
+            'n_directed_edges': 0, 're': [], 'im': [],
+            'spectral_radius': 0.0, 'spectral_gap': 0.0,
+            'n_real_eigvals': 0, 'ihara_holds': False, 'ihara_rel_diff': 0.0,
         }), encoding='utf-8')
 
     print('Building stones index…')
